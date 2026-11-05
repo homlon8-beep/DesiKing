@@ -1,0 +1,8 @@
+*.apk
+*.idsig
+*.keystore
+*.log
+/apktool_src/
+/manifest_dump.txt
+build/
+**/build/
