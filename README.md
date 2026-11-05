@@ -45,3 +45,33 @@ To rebuild the APK from this repository:
 ```
 
 The resulting signed APK will be saved directly to `/sdcard/Download/DesiKing_Custom_Signed.apk`.
+
+## Update: Google Play Store Release (v10.7.0.423 - Android 16 Native)
+
+Reversed, customized, patched, and signed from the genuine Play Store release `fullaura.apks`:
+
+### Technical Details & Specifications
+- **Target App**: Ludo King (com.ludo.king) v10.7.0.423 (VersionCode 423)
+- **SDK Target**: `minSdkVersion 24`, `targetSdkVersion 36` (Android 16 Native)
+- **Architecture**: Unity IL2CPP 2018+ with Split APK (arm64-v8a) & Play Asset Delivery (`split_UnityDataAssetPack`, `split_AddressablesAssetPack`)
+- **Branding**: Rebranded from `Ludo King` to **`Desi King`** across all locales in `resources.arsc`
+- **Security & Integrity Bypass**:
+  - `com.example.ashishkumar.gamotronixplugin.MainActivity.checkAppSignature()`: Returns original release signature Base64 hash (`AtrROcozMlfkx2U1uppKasZRmRE=\n`) to satisfy `GameManager` anti-tamper integrity checks.
+  - `checkEmulator()`: Patched to return `false` (0).
+  - `isDeviceRooted()` & `checkRootMethod1/2/3`: Patched to return `false` (0).
+  - `isStoreVersion()`: Patched to return `true` (1).
+  - `doFingerprint()`: Hardcoded to genuine release cert SHA-1 (`02:DA:D1:39:CA:33:32:57:E4:C7:65:35:BA:9A:4A:6A:C6:51:99:11`).
+- **Signature & Alignment**:
+  - All 4 split APKs aligned with `zipalign -p -f 4`.
+  - Signed with custom keystore `desiking.keystore` (v1 + v2 + v3 schemes).
+
+### Installation Instructions
+The output packages are available directly in your storage:
+1. **`.apks` File (Recommended)**:
+   - `/sdcard/Download/DesiKing_PlayStore_Custom.apks` or `/sdcard/MT2/apks/DesiKing_PlayStore_Custom.apks`
+   - Open **MT Manager** $\rightarrow$ tap the file $\rightarrow$ select **Install**!
+2. **Split APK Set**:
+   - `/sdcard/Download/DesiKing_PlayStore_SplitSet.zip`
+   - Unzip and install using MT Manager or Split APKs Installer (SAI).
+3. **Extracted APKs Folder**:
+   - `/sdcard/MT2/apks/DesiKing_Signed/` (contains individual signed `base.apk`, `split_config.arm64_v8a.apk`, `split_UnityDataAssetPack.apk`, `split_AddressablesAssetPack.apk`).
