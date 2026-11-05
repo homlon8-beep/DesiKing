@@ -401,8 +401,6 @@
     const/4 v2, -0x1
 
     invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
-    invoke-virtual {p0}, Lcom/facebook/ads/AudienceNetworkActivity;->finish()V
-    return-void
 
     const/4 v0, 0x1
 

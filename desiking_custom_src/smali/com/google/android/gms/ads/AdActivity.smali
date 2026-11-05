@@ -117,8 +117,6 @@
     .locals 2
 
     invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
-    invoke-virtual {p0}, Lcom/google/android/gms/ads/AdActivity;->finish()V
-    return-void
 
     invoke-static {}, Lcom/google/android/gms/ads/internal/client/zzm;->zzix()Lcom/google/android/gms/ads/internal/client/zzl;
 

@@ -191,8 +191,6 @@
 
     .line 71
     invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
-    invoke-virtual {p0}, Landroid/app/Activity;->finish()V
-    return-void
 
     .line 73
     invoke-static {}, Lcom/vungle/publisher/inject/Injector;->b()Lcom/vungle/publisher/tg;
