@@ -4,8 +4,8 @@ usesFramework:
   ids:
   - 1
 sdkInfo:
-  minSdkVersion: 15
-  targetSdkVersion: 23
+  minSdkVersion: 21
+  targetSdkVersion: 30
 versionInfo:
   versionCode: 7
   versionName: 1.6-DesiKing

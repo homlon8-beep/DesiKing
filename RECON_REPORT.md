@@ -81,3 +81,17 @@
 4. Rebuild, Alignment & Signature:
    - 4-byte boundary aligned with `zipalign`.
    - v1 + v2 + v3 signed with RSA 2048-bit key via `apksigner`.
+
+---
+
+## 🔧 Android 14-16 Compatibility Patch (Fix for "Package appears to be invalid")
+
+- **Issue**: Modern Android (specifically Android 14+ through Android 16, API 36) rejects APK installations if:
+  1. `targetSdkVersion` is below the platform minimum (`targetSdkVersion < 24` is blocked by system installer `INSTALL_FAILED_DEPRECATED_SDK_VERSION`).
+  2. Any activity with `<intent-filter>` omits an explicit `android:exported` attribute (`INSTALL_PARSE_FAILED_MANIFEST_MALFORMED`).
+  3. Native 32-bit libraries are uncompressed without alignment.
+- **Remediation**:
+  1. Updated `targetSdkVersion` to `30` and `minSdkVersion` to `21`.
+  2. Explicitly injected `android:exported="true"` onto `com.unity3d.player.UnityPlayerNativeActivity`.
+  3. Set `android:extractNativeLibs="true"` and `android:requestLegacyExternalStorage="true"` in `<application>`.
+- **Result**: APK passes Android 12-16 package parser checks and installs seamlessly.
