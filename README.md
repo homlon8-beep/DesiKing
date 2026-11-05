@@ -75,3 +75,13 @@ The output packages are available directly in your storage:
    - Unzip and install using MT Manager or Split APKs Installer (SAI).
 3. **Extracted APKs Folder**:
    - `/sdcard/MT2/apks/DesiKing_Signed/` (contains individual signed `base.apk`, `split_config.arm64_v8a.apk`, `split_UnityDataAssetPack.apk`, `split_AddressablesAssetPack.apk`).
+
+### Phase 2 Patch: IL2CPP Anti-Tamper Neutralization
+In addition to the Java/Smali plugin spoofing, `GameManager.Start()` in `libil2cpp.so` contained a 4-point verification check branching to `ShowAPKTemperedPopup()`:
+- `0x214fef4`: `cbnz w0, #0x2153fc8` -> Patched with `NOP` (`1f 20 03 d5`)
+- `0x214ff20`: `tbz w0, #0, #0x2153fc8` -> Patched with `NOP` (`1f 20 03 d5`)
+- `0x214ff38`: `tbz w0, #0, #0x2153fc8` -> Patched with `NOP` (`1f 20 03 d5`)
+- `0x214ff50`: `tbz w0, #0, #0x2153fc8` -> Patched with `NOP` (`1f 20 03 d5`)
+- `0x2150000`: `b #0x21540c8` -> Patched with `NOP` (`1f 20 03 d5`)
+- `0x21500c8` (`ShowAPKTemperedPopup` entry): Patched with `RET` (`c0 03 5f d6`)
+- `0x21505b8` (`ShowRootedDevicePopup` entry): Patched with `RET` (`c0 03 5f d6`)
