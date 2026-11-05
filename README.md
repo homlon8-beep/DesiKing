@@ -85,3 +85,13 @@ In addition to the Java/Smali plugin spoofing, `GameManager.Start()` in `libil2c
 - `0x2150000`: `b #0x21540c8` -> Patched with `NOP` (`1f 20 03 d5`)
 - `0x21500c8` (`ShowAPKTemperedPopup` entry): Patched with `RET` (`c0 03 5f d6`)
 - `0x21505b8` (`ShowRootedDevicePopup` entry): Patched with `RET` (`c0 03 5f d6`)
+
+### Phase 3 Fix: Crash Resolved (Proper Stack & Register Preservation)
+- **Root Cause of Crash**: In the previous attempt, an unconditional branch at `0x2150000` (`b #0x21500c8`) was replaced with `NOP`. That branch immediately followed a register pop (`ldp` / `ldr x30, [sp], #0x40`). NOPing it caused execution to fall through into `0x2150004`, where `sp` and `x30` were popped a second time, resulting in severe stack corruption and an immediate `SIGSEGV` crash within 5 seconds of opening.
+- **Proper Fix**:
+  - `0x214fd24`: Replaced `ldr x8, [x21]` with `b #0x214ff78` (`95 00 00 14`). This cleanly skips the entire anti-tamper, hash, signature, and root checking routine while preserving `x19` (`this`), jumping directly to the legitimate game initialization path (`RequestPreInterstitial` coroutine setup).
+  - `0x214fe94` & `0x214ffc8`: Both fallback branches patched with `b #0x214ff78` to guarantee clean continuation.
+  - `0x2150000`: Restored original branch (`b #0x21500c8`, `32 00 00 14`).
+  - `ShowAPKTemperedPopup` (`0x21500c8`) & `ShowRootedDevicePopup` (`0x21505b8`): Patched entry with `RET` (`c0 03 5f d6`).
+  - `IsDeviceRootedFound` (`0x2150160`), `AppPhoneCracked` (`0x22ce968`), and `IsAppRunningEmulator` (`0x22d425c`): Patched to return `false` (`mov w0, wzr; ret`).
+  - All splits re-aligned with `zipalign -p -f 4` and signed with `apksigner` (v1 + v2 + v3).
